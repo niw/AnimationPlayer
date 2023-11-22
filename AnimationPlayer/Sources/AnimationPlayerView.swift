@@ -19,7 +19,7 @@ struct AnimationPlayerView: View {
     var framesPerSecond: Double = 0
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0.0) {
             VideoPlayerView(player: animationPlayer.player)
 
             HStack {
@@ -69,7 +69,7 @@ struct AnimationPlayerView: View {
                     Text("End")
                 }
             }
-            .padding(EdgeInsets(top: 0.0, leading: 8.0, bottom: 8.0, trailing: 8.0))
+            .padding(8.0)
         }
         .task {
             do {
