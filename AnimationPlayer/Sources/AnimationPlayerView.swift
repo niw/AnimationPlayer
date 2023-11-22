@@ -18,6 +18,9 @@ struct AnimationPlayerView: View {
     @State
     var framesPerSecond: Double = 0
 
+    @State
+    var scrollPosition: Int?
+
     var body: some View {
         VStack(spacing: 0.0) {
             VideoPlayerView(player: animationPlayer.player)
@@ -70,6 +73,42 @@ struct AnimationPlayerView: View {
                 }
             }
             .padding(8.0)
+
+            ScrollView(.horizontal) {
+                LazyHGrid(rows: [
+                    GridItem(.fixed(30.0), spacing: 0.0),
+                    GridItem(.fixed(30.0), spacing: 0.0),
+                    GridItem(.fixed(30.0), spacing: 0.0),
+                    GridItem(.fixed(10.0), spacing: 0.0)
+                ], spacing: 0.0) {
+                    ForEach(0..<frames, id: \.self) { frame in
+                        if framesPerSecond != .zero && frame % Int(framesPerSecond) == .zero {
+                            let seconds = Int(Double(frame + 1) / framesPerSecond)
+                            Text("\(seconds)")
+                                .frame(width: 30.0)
+                        } else {
+                            Spacer()
+                                .frame(width: 30.0)
+                        }
+                        Text("\(frame)")
+                            .frame(width: 30.0)
+                        Rectangle()
+                            .stroke(lineWidth: 1.0)
+                            .frame(width: 30.0)
+                        if frame == animationPlayer.currentFrame {
+                            Rectangle()
+                                .fill(.blue)
+                                .frame(width: 30.0)
+                        } else {
+                            Spacer()
+                                .frame(width: 30.0)
+                        }
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .scaledToFit()
+            .scrollPosition(id: $scrollPosition, anchor: .center)
         }
         .task {
             do {
@@ -77,6 +116,9 @@ struct AnimationPlayerView: View {
                 framesPerSecond = try await animationPlayer.framesPerSecond
             } catch {
             }
+        }
+        .onChange(of: animationPlayer.currentFrame) {
+            scrollPosition = animationPlayer.currentFrame
         }
     }
 }
