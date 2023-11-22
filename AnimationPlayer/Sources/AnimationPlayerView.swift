@@ -12,12 +12,26 @@ struct AnimationPlayerView: View {
     @State
     var animationPlayer: AnimationPlayer
 
+    @State
+    var frames: Int = 0
+
+    @State
+    var framesPerSecond: Double = 0
+
     var body: some View {
         VStack {
             VideoPlayerView(player: animationPlayer.player)
+
             HStack {
                 Button {
-                    animationPlayer.back()
+                    animationPlayer.seekToBegin()
+                } label: {
+                    Text("Begin")
+                }
+                Button {
+                    Task {
+                        await animationPlayer.stepBack()
+                    }
                 } label: {
                     Text("Back")
                 }
@@ -25,7 +39,7 @@ struct AnimationPlayerView: View {
                 Spacer()
 
                 Button {
-                    if animationPlayer.rate > .zero {
+                    if animationPlayer.rate != .zero {
                         animationPlayer.rate = .zero
                     } else {
                         animationPlayer.rate = 1.0
@@ -38,15 +52,31 @@ struct AnimationPlayerView: View {
                     }
                 }
 
+                Text("\(animationPlayer.currentFrame)/\(frames) (\(framesPerSecond) fps)")
+
                 Spacer()
 
                 Button {
-                    animationPlayer.forward()
+                    Task {
+                        await animationPlayer.stepForward()
+                    }
                 } label: {
                     Text("Forward")
                 }
+                Button {
+                    animationPlayer.seekToEnd()
+                } label: {
+                    Text("End")
+                }
             }
             .padding(EdgeInsets(top: 0.0, leading: 8.0, bottom: 8.0, trailing: 8.0))
+        }
+        .task {
+            do {
+                frames = try await animationPlayer.frames
+                framesPerSecond = try await animationPlayer.framesPerSecond
+            } catch {
+            }
         }
     }
 }
