@@ -155,6 +155,7 @@ final class AnimationPlayer {
     func seekToBegin() {
         rate = .zero
         player.seek(to: .zero)
+        updateCurrentFrame()
     }
 
     func seekToEnd() {
@@ -163,6 +164,7 @@ final class AnimationPlayer {
             return
         }
         player.seek(to: currentItem.duration, toleranceBefore: .zero, toleranceAfter: .positiveInfinity)
+        updateCurrentFrame()
     }
 
     func stepForward() async {
