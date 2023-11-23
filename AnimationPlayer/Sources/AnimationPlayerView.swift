@@ -124,5 +124,5 @@ struct AnimationPlayerView: View {
 }
 
 #Preview {
-    AnimationPlayerView(animationPlayer: AnimationPlayer(url: nil))
+    AnimationPlayerView(animationPlayer: AnimationPlayer(url: URL(fileURLWithPath: "/dev/null")))
 }
