@@ -14,6 +14,7 @@
 		54860D602B0C532B00734E63 /* MovieDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54860D5F2B0C532B00734E63 /* MovieDocument.swift */; };
 		54860D622B0C775200734E63 /* AnimationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54860D612B0C775200734E63 /* AnimationPlayer.swift */; };
 		54860D642B0C7AE600734E63 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54860D632B0C7AE600734E63 /* VideoPlayerView.swift */; };
+		5493E63F2B0F41A60075E997 /* ObserverToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5493E63E2B0F41A60075E997 /* ObserverToken.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		54860D5F2B0C532B00734E63 /* MovieDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDocument.swift; sourceTree = "<group>"; };
 		54860D612B0C775200734E63 /* AnimationPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationPlayer.swift; sourceTree = "<group>"; };
 		54860D632B0C7AE600734E63 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		5493E63E2B0F41A60075E997 /* ObserverToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverToken.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 				54860D4B2B0C3BE700734E63 /* MainApp.swift */,
 				54860D5F2B0C532B00734E63 /* MovieDocument.swift */,
 				54860D632B0C7AE600734E63 /* VideoPlayerView.swift */,
+				5493E63E2B0F41A60075E997 /* ObserverToken.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 				54860D4E2B0C3BE700734E63 /* AnimationPlayerView.swift in Sources */,
 				54860D4C2B0C3BE700734E63 /* MainApp.swift in Sources */,
 				54860D642B0C7AE600734E63 /* VideoPlayerView.swift in Sources */,
+				5493E63F2B0F41A60075E997 /* ObserverToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

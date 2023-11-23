@@ -14,25 +14,9 @@ import SwiftUI
 final class AnimationPlayer {
     let player: AVPlayer
 
-    private var playerRateDidChangeObserver: Any?
+    private var playerRateDidChangeObserverToken: ObserverToken<any NSObjectProtocol>?
 
-    private func removePlayerRateDidChangeObserver() {
-        guard let playerRateDidChangeObserver else {
-            return
-        }
-        NotificationCenter.default.removeObserver(playerRateDidChangeObserver)
-        self.playerRateDidChangeObserver = nil
-    }
-
-    private var playerPeriodicTimeObserver: Any?
-
-    private func removePlayerPeriodicTimeObserver() {
-        guard let playerPeriodicTimeObserver else {
-            return
-        }
-        player.removeTimeObserver(playerPeriodicTimeObserver)
-        self.playerPeriodicTimeObserver = nil
-    }
+    private var playerPeriodicTimeObserverToken: ObserverToken<Any>?
 
     init(url: URL?) {
         if let url {
@@ -41,17 +25,12 @@ final class AnimationPlayer {
             player = AVPlayer()
         }
         rate = player.rate
-        playerRateDidChangeObserver = NotificationCenter.default.addObserver(forName: AVPlayer.rateDidChangeNotification, object: player, queue: nil) { [weak self] _ in
+        playerRateDidChangeObserverToken = ObserverToken(token: NotificationCenter.default.addObserver(forName: AVPlayer.rateDidChangeNotification, object: player, queue: nil) { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.playerRateDidChange()
             }
-        }
-    }
-
-    deinit {
-        Task { @MainActor in
-            removePlayerRateDidChangeObserver()
-            removePlayerPeriodicTimeObserver()
+        }) { token in
+            NotificationCenter.default.removeObserver(token)
         }
     }
 
@@ -74,7 +53,7 @@ final class AnimationPlayer {
             return
         }
 
-        removePlayerPeriodicTimeObserver()
+        self.playerPeriodicTimeObserverToken = nil
 
         if rate != .zero {
             let currentRate = rate
@@ -85,11 +64,15 @@ final class AnimationPlayer {
                     guard currentRate == rate else {
                         return
                     }
-                    playerPeriodicTimeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: nil, using: { [weak self] time in
+                    let player = player
+                    playerPeriodicTimeObserverToken = ObserverToken(token: player.addPeriodicTimeObserver(forInterval: interval, queue: nil) { [weak self] time in
                         Task { @MainActor [weak self] in
                             self?.updateCurrentFrame()
                         }
-                    })
+                    }) { token in
+                        // Do not retain `self` here.
+                        player.removeTimeObserver(token)
+                    }
                 } catch {
                 }
             }
